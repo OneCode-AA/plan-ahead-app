@@ -12,20 +12,28 @@ function Cart({ cartItems = [], onRemoveItem, toggleCartVisibility }) {
   }, [cartItems]);
 
   const handleCheckout = () => {
-    router.push('/checkout'); 
+    router.push('/checkout');
   };
 
   return (
-    <section className="shopping-cart bg-slate-100 p-4 rounded-lg border absolute right-3 top-[0vh] z-50  "
-    >
-      <h2 className="text-2xl font-bold mb-4">Shopping Cart</h2>
+    <section className="shopping-cart bg-slate-100 p-4 rounded-lg border absolute right-3 top-[0vh] z-50 w-[350px] shadow-xl">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Shopping Cart</h2>
+        <button
+          onClick={toggleCartVisibility}
+          className="text-sm text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
+      </div>
+
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div>
-          {cartItems.map((item) => (
+          {cartItems.map((item, index) => (
             <div
-              key={item.id} 
+              key={`${item.id}-${index}`}
               className="cart-item flex justify-between items-center p-2 mb-2 bg-white rounded-lg border"
             >
               <Image
@@ -48,10 +56,12 @@ function Cart({ cartItems = [], onRemoveItem, toggleCartVisibility }) {
               </button>
             </div>
           ))}
-          <div className="flex justify-between mt-4">
-            <span className="font-bold">Total Items:</span>
+
+          <div className="flex justify-between mt-4 text-md font-semibold">
+            <span>Total Items:</span>
             <span>{totalQuantity}</span>
           </div>
+
           <button
             onClick={handleCheckout}
             className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-5 rounded mt-4 w-full"

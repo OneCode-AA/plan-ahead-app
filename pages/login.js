@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { users } from '@/data/users';
 import '../styles/globals.css';
 
 export default function LoginPage() {
@@ -11,16 +10,27 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleLogin = () => {
-    const user = users.find((u) => u.username === userName && u.password === password);
+  const handleLogin = async () => {
+    try {
+      const res = await fetch('/api/users');
+      const users = await res.json();
 
-    if (user) {
-      sessionStorage.setItem('userName', user.username);
-      sessionStorage.setItem('storeId', user.storeId); // Store storeId for filtering products
-      sessionStorage.setItem('storeName', user.name);
-      router.push('/dashboard');
-    } else {
-      setError('Invalid credentials');
+      const user = users.find(
+        (u) => u.id === userName && u.password === password
+      );
+
+      if (user) {
+        sessionStorage.setItem('userName', user.name);
+        sessionStorage.setItem('storeId', user.id);
+        sessionStorage.setItem('storeName', user.name);
+
+        router.push('/dashboard');
+      } else {
+        setError('Invalid credentials');
+      }
+    } catch (err) {
+      setError('Error logging in. Please try again.');
+      console.error(err);
     }
   };
 
@@ -30,7 +40,7 @@ export default function LoginPage() {
       {error && <p className="text-red-500">{error}</p>}
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Store ID"
         className="border p-2 w-full mb-2"
         value={userName}
         onChange={(e) => setUserName(e.target.value)}

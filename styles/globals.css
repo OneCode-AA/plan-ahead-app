@@ -1,2 +1,5 @@
 @import "tailwindcss";
 
+.cartBtn {
+    font-size: 3rem;
+}

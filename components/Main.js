@@ -3,14 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Cart from './Cart';
 import ProductCard from './ProductCard';
 
-function Main({ storeId }) {
+function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [isCartVisible, setIsCartVisible] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
 
-  // Load cart from localStorage on mount
+ 
   useEffect(() => {
     const storedCart = localStorage.getItem('cartItems');
     if (storedCart) {
@@ -18,22 +15,18 @@ function Main({ storeId }) {
     }
   }, []);
 
-  // Save cart to localStorage when cartItems change
+ 
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Fetch products and filter by storeId
+
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('/api/products');
+      const res = await fetch(`/api/products?storeId=${storeId}`);
       if (res.ok) {
         const data = await res.json();
-        // ✅ Filter products by storeId
-        const filteredProducts = data.filter((product) =>
-          product.storeId.includes(storeId)
-        );
-        setProducts(filteredProducts);
+        setProducts(data);
       }
     }
     if (storeId) {
@@ -41,7 +34,7 @@ function Main({ storeId }) {
     }
   }, [storeId]);
 
-  // Add item to cart
+
   const handleAddToCart = (item) => {
     setCartItems((prevCart) => {
       const existingItem = prevCart.find(
@@ -58,33 +51,76 @@ function Main({ storeId }) {
     });
   };
 
-  // Remove item from cart
-  const handleRemoveItem = (index) => {
-    const updatedCart = cartItems.filter((_, i) => i !== index);
+
+  const handleRemoveItem = (itemId) => {
+    const updatedCart = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updatedCart);
   };
 
-  return (
-    <main className="flex flex-col py-6">
-      <section className="products-page relative px-4">
-        {isCartVisible && <Cart cartItems={cartItems} onRemoveItem={handleRemoveItem} />}
+ 
+  const filteredProducts = products
+    .filter((product) => {
+      const categoryMatch = !selectedCategory || product.name === selectedCategory;
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {products.length > 0 ? (
-            products.map((product) => (
+      const matchingItems = product.items.filter(
+        (item) =>
+          (!selectedSize || item.size === selectedSize) &&
+          item.storeId.includes(storeId)
+      );
+
+      return categoryMatch && matchingItems.length > 0;
+    })
+    .map((product) => ({
+      ...product,
+      items: product.items.filter(
+        (item) =>
+          (!selectedSize || item.size === selectedSize) &&
+          item.storeId.includes(storeId)
+      )
+    }));
+
+  return (
+    <div className="products-page grid grid-cols-1 md:grid-cols-4 gap-6 p-4">
+     
+      <section className="col-span-3">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div key={product.id} className="mb-10">
+              <h2 className="text-2xl font-bold text-emerald-800 mb-2">
+                {product.name}
+              </h2>
+
+              {selectedSize ? (
+                <p className="text-emerald-600 text-sm mb-4">
+                  Size: {selectedSize}
+                </p>
+              ) : (
+                <p className="text-emerald-600 text-sm mb-4">
+                  Sizes: {[...new Set(product.items.map((item) => item.size))].join(', ')}
+                </p>
+              )}
+
               <ProductCard
-                key={product.id}
                 product={product}
                 handleAddToCart={handleAddToCart}
               />
-            ))
-          ) : (
-            <p>No products available for your store.</p>
-          )}
-        </div>
+            </div>
+          ))
+        ) : (
+          <p>No products match your filters.</p>
+        )}
       </section>
-    </main>
+
+    
+      <section className="col-span-1">
+        {isCartVisible && (
+          <Cart
+            cartItems={cartItems}
+            onRemoveItem={handleRemoveItem}
+          />
+        )}
+      </section>
+    </div>
   );
 }
 
