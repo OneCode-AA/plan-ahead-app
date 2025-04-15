@@ -80,22 +80,22 @@ function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
     }));
 
   return (
-    <div className="products-page grid grid-cols-1 md:grid-cols-4 gap-6 p-4">
+    <section className="w-screen products-page grid grid-cols-1 max-md:text-center md:grid-cols-4 gap-6 p-4">
      
-      <section className="col-span-3">
+      <article className="col-span-3">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product.id} className="mb-10">
-              <h2 className="text-2xl font-bold text-emerald-800 mb-2">
+            <section key={product.id} className="mb-10 w-screen">
+              <h2 className="text-2xl ml-10 font-bold text-emerald-800 mb-2">
                 {product.name}
               </h2>
 
               {selectedSize ? (
-                <p className="text-emerald-600 text-sm mb-4">
+                <p className="text-emerald-600 ml-10 text-sm mb-4">
                   Size: {selectedSize}
                 </p>
               ) : (
-                <p className="text-emerald-600 text-sm mb-4">
+                <p className="text-emerald-600 ml-10 text-sm mb-4">
                   Sizes: {[...new Set(product.items.map((item) => item.size))].join(', ')}
                 </p>
               )}
@@ -104,23 +104,23 @@ function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
                 product={product}
                 handleAddToCart={handleAddToCart}
               />
-            </div>
+            </section>
           ))
         ) : (
           <p>No products match your filters.</p>
         )}
-      </section>
+      </article>
 
     
-      <section className="col-span-1">
+      <article className="col-span-1">
         {isCartVisible && (
           <Cart
             cartItems={cartItems}
             onRemoveItem={handleRemoveItem}
           />
         )}
-      </section>
-    </div>
+      </article>
+    </section>
   );
 }
 

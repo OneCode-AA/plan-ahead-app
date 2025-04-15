@@ -44,10 +44,10 @@ function Header({
   }, [router]);
 
   return (
-    <header className="border-b-2 border-black pb-2 pl-10 flex justify-between items-center">
+    <header className="border-b-2 border-black pb-2 px-10 flex max-md:flex-col max-md:justify-center justify-between items-center">
       <div>
         <h2 className="text-4xl font-bold text-emerald-900">Available Products</h2>
-        <div className="filters flex gap-4 mt-2 text-emerald-600">
+        <div className="filters flex max-md:justify-center gap-4 mt-2 text-emerald-600">
           <select
             className="productList"
             onChange={(e) => {
@@ -86,10 +86,10 @@ function Header({
           
         </div>
       </div>
-      <div>
+      <div className="flex items-center gap-4">
         <Nav />
         <ShoppingCartCheckoutRounded
-          className="cartBtn bg-emerald-900 p-2 hover:scale-[1.1] transition-all hover:cursor-pointer hover:bg-emerald-800 text-emerald-50 rounded-full"
+          className="cartBtn bg-emerald-900 h-2 w-2 p-[2px] hover:scale-[1.1] transition-all hover:cursor-pointer hover:bg-emerald-800 text-emerald-50 rounded-full"
           onClick={toggleCartVisibility}
         />
       </div>

@@ -16,12 +16,12 @@ function Cart({ cartItems = [], onRemoveItem, toggleCartVisibility }) {
   };
 
   return (
-    <section className="shopping-cart bg-slate-100 p-4 rounded-lg border absolute right-3 top-[0vh] z-50 w-[350px] shadow-xl">
+    <section className="shopping-cart bg-slate-100 p-4 rounded-lg border relative right-5 top-[0vh] z-50 w-[350px] shadow-xl">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Shopping Cart</h2>
         <button
           onClick={toggleCartVisibility}
-          className="text-sm text-gray-500 hover:text-gray-700"
+          className="text-md text-gray-500 hover:text-gray-700"
         >
           ✕
         </button>

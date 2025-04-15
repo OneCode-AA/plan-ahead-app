@@ -35,14 +35,18 @@ export default function Dashboard() {
   }, [router]);
 
   return (
-    <section className="min-h-screen min-w-screen">
-      <div className="p-10">
-        <h1 className="text-2xl font-bold">Welcome, {storeName}!</h1>
-      </div>
-      <div className="flex items-center px-10">
+    <section className="min-h-screen w-screen">
+      <div className="py-2 px-10 flex max-md:justify-center items-center">
+        <h1 className="text-2xl font-bold">Welcome,</h1>
+        <span className="text-lg font-semibold flex items-center px-2 gap-2">
         <Image src="/globe.svg" alt="Store Icon" width={100} height={100} />
-        <span className="px-2 text-lg font-semibold">{userName}</span>
+        {storeName}!
+        </span>
       </div>
+      {/* <div className="flex items-center px-10"> */}
+        {/* <Image src="/globe.svg" alt="Store Icon" width={100} height={100} /> */}
+        {/* <span className="px-2 text-lg font-semibold">{userName}</span> */}
+      {/* </div> */}
       <Header
         toggleCartVisibility={toggleCartVisibility}
         selectedCategory={selectedCategory}

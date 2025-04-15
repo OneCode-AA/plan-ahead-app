@@ -4,7 +4,7 @@ import '../styles/globals.css';
 
 function ProductCard({ product, handleAddToCart }) {
   return (
-    <section className="product-card p-4 flex flex-col gap-8">
+    <section className="w-screen product-card py-4 px-5 flex flex-col gap-8">
       <article className="min-w-[90vw] px-5 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {product.items.map((item) => (
           <article
