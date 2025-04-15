@@ -8,7 +8,7 @@ function Nav() {
 
   const handleLogout = () => {
     sessionStorage.clear();
-    localStorage.removeItem('cartItems'); // optional
+    localStorage.removeItem('cartItems'); 
     localStorage.removeItem('selectedCategory');
     localStorage.removeItem('selectedSize');
     router.push('/login');
