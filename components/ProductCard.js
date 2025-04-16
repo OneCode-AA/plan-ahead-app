@@ -9,7 +9,7 @@ function ProductCard({ product, handleAddToCart }) {
         {product.items.map((item) => (
           <article
             key={`${item.id}-${item.size}`}
-            className="item-card flex flex-col justify-center items-center text-center gap-8 bg-slate-50 border p-4 rounded-lg"
+            className="item-card flex flex-col justify-center items-center text-center gap-6 bg-slate-50 border p-4 rounded-lg"
           >
             <Image
               src={item.itemImage || '/placeholder.png'}
@@ -21,10 +21,11 @@ function ProductCard({ product, handleAddToCart }) {
               className="bg-slate-100"
             />
             <article>
-              <h3 className="text-emerald-800 text-xl">{item.name}</h3>
-              <h5 className="text-emerald-800">
-                <span className="text-sm text-emerald-500">Size: {item.size}</span>
-              </h5>
+              <h3 className="text-emerald-800 text-xl font-bold">{item.name}</h3>
+              <p className="text-sm text-emerald-500">Size: {item.size}</p>
+              <p className="text-sm text-emerald-500">
+                Amount Per Box: {item.amountPerBox}
+              </p>
             </article>
             <article>
               <button

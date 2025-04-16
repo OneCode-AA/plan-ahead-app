@@ -2,12 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import Cart from './Cart';
 import ProductCard from './ProductCard';
+import '../styles/globals.css';
 
-function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
-  const [products, setProducts] = useState([]);
+function Main({
+  storeId,
+  isCartVisible,
+  toggleCartVisibility,
+  selectedCategory,
+  selectedSize,
+  products
+}) {
   const [cartItems, setCartItems] = useState([]);
 
- 
+  // Load cart from localStorage on mount
   useEffect(() => {
     const storedCart = localStorage.getItem('cartItems');
     if (storedCart) {
@@ -15,25 +22,10 @@ function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
     }
   }, []);
 
- 
+  // Save cart to localStorage when it changes
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
-
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const res = await fetch(`/api/products?storeId=${storeId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setProducts(data);
-      }
-    }
-    if (storeId) {
-      fetchProducts();
-    }
-  }, [storeId]);
-
 
   const handleAddToCart = (item) => {
     setCartItems((prevCart) => {
@@ -51,13 +43,12 @@ function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
     });
   };
 
-
   const handleRemoveItem = (itemId) => {
     const updatedCart = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updatedCart);
   };
 
- 
+  // Filter products based on category, size, and store
   const filteredProducts = products
     .filter((product) => {
       const categoryMatch = !selectedCategory || product.name === selectedCategory;
@@ -81,8 +72,7 @@ function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
 
   return (
     <section className="w-screen products-page grid grid-cols-1 max-md:text-center md:grid-cols-4 gap-6 p-4">
-     
-      <article className="col-span-3">
+      <article className="">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <section key={product.id} className="mb-10 w-screen">
@@ -111,12 +101,12 @@ function Main({ storeId, isCartVisible, selectedCategory, selectedSize }) {
         )}
       </article>
 
-    
       <article className="col-span-1">
         {isCartVisible && (
           <Cart
             cartItems={cartItems}
             onRemoveItem={handleRemoveItem}
+            toggleCartVisibility={toggleCartVisibility}
           />
         )}
       </article>

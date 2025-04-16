@@ -40,6 +40,8 @@ function Header({
       }
     };
 
+    
+
     fetchProducts();
   }, [router]);
 
@@ -58,10 +60,11 @@ function Header({
           >
             <option value="">All Categories</option>
             {[...new Set(products.map((product) => product.name))].map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
+  <option key={category} value={category}>
+    {category}
+  </option>
+))}
+
           </select>
 
           <select

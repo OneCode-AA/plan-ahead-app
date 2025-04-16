@@ -3,3 +3,7 @@
 .cartBtn {
     font-size: 3rem;
 }
+
+button:hover {
+    cursor: pointer;
+}

@@ -23,23 +23,48 @@ function Checkout() {
   };
 
   const handleEmailReceipt = async () => {
+    const date = new Date().toLocaleString();
+
     const receiptHTML = `
-      <h2>New Order Receipt</h2>
-      <ul>
-        ${cartItems.map(item => `
-          <li>
-            <strong>${item.name}</strong> (${item.size}) - Quantity: ${item.quantity}
-          </li>
-        `).join('')}
-      </ul>
-      <p><strong>Total Items:</strong> ${cartItems.reduce((total, item) => total + item.quantity, 0)}</p>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px;">
+        <div style="text-align: center;">
+          <img src="https://via.placeholder.com/150x50?text=Store+Logo" alt="Logo" />
+          <h2 style="color: #2d6a4f;">Order Receipt</h2>
+          <p>${date}</p>
+        </div>
+        <hr />
+        <h3>Items Ordered:</h3>
+        <ul style="list-style: none; padding: 0;">
+          ${cartItems
+            .map(
+              (item) => `
+            <li style="margin-bottom: 10px;">
+              <strong>${item.name}</strong><br />
+              Size: ${item.size}<br />
+              Quantity: ${item.quantity}<br />
+              Amount per box: ${item.amountPerBox || 'N/A'}
+            </li>
+          `
+            )
+            .join('')}
+        </ul>
+        <p><strong>Total Items:</strong> ${cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        )}</p>
+        <hr />
+        <p style="font-size: 12px; text-align: center; color: #666;">Thank you for your order!<br />This receipt was generated from your Store Dashboard.</p>
+      </div>
     `;
 
     try {
       const response = await fetch('/api/email-receipt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject: 'New Order from Store Dashboard', html: receiptHTML }),
+        body: JSON.stringify({
+          subject: 'New Order from Store Dashboard',
+          html: receiptHTML,
+        }),
       });
 
       if (response.ok) {

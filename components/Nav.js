@@ -2,6 +2,7 @@ import { House, Logout } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import '../styles/globals.css';
 
 function Nav() {
   const router = useRouter();
