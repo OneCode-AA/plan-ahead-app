@@ -7,7 +7,7 @@ import '../styles/globals.css';
 import Header from '@/components/Header';
 import Main from '@/components/Main';
 
-export default function Dashboard() {
+export default function Dashboard( ) {
   const [userName, setUserName] = useState('');
   const [storeId, setStoreId] = useState('');
   const [storeName, setStoreName] = useState('');
@@ -16,6 +16,23 @@ export default function Dashboard() {
   const [selectedSize, setSelectedSize] = useState('');
   const [products, setProducts] = useState([]);
   const router = useRouter();
+
+  const storeLogos = [
+    {
+     store: "lunds1",
+     logoImg: '/lundslogo.svg'
+    },
+    {
+      store: "fresh1",
+     logoImg: '/freshthymelogo.png'
+    },
+    {
+      store: "admin",
+      logoImg: "/admin.jpg",
+    }]
+
+    const currentStoreLogo = storeLogos.find((logo) => logo.store === storeId);
+
 
   const toggleCartVisibility = () => {
     setIsCartVisible((prev) => !prev);
@@ -32,6 +49,7 @@ export default function Dashboard() {
       setUserName(username);
       setStoreId(storedStoreId);
       setStoreName(storedStoreName);
+     
     }
   }, [router]);
 
@@ -71,7 +89,7 @@ export default function Dashboard() {
       <div className="py-2 px-10 flex max-md:justify-center items-center">
         <h1 className="text-2xl font-bold">Welcome,</h1>
         <span className="text-lg font-semibold flex items-center px-2 gap-2">
-          <Image src="/globe.svg" alt="Store Icon" width={100} height={100} />
+          <Image src={currentStoreLogo?.logoImg || '/admin.jpg'} alt="Store Icon" width={100} height={100} />
           {storeName}!
         </span>
       </div>
